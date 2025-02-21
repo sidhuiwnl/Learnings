@@ -23,6 +23,6 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           context: .
-          file: ./docker/Dockerfile.backend
+          file: ./docker/Dockerfile.websocket
           push: true
-          tags: sidharth999/learning-backend:${{ github.sha }}
+          tags: sidharth999/learning-websocket:${{ github.sha }}
