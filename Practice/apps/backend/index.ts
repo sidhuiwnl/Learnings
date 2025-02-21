@@ -7,12 +7,17 @@ app.use(express.json());
 
 app.post("/signup", async (req, res) => {
     const body = req.body;
+    console.log(body);
     await client.user.create({
         data : {
             username : body.username,
             password: body.password,
 
         }
+    })
+    res.status(200).send({
+        success: true,
+        message: "Signup successfully",
     })
 
 })
@@ -44,6 +49,6 @@ app.post("/todo",async (req,res) =>{
 
 
 
-app.listen(3000,() =>{
-    console.log("Server started on port 3000");
+app.listen(8000,() =>{
+    console.log("Server started on port 8000");
 })

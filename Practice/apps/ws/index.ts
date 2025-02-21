@@ -1,35 +1,27 @@
-// @ts-ignore
-import  WebSocket  from "ws";
+
 import { client } from "db/client";
 
-type Data  = {
-    userId  : string;
-    isActive : boolean;
-    id : string;
-}
+Bun.serve({
+    port : 8080,
+    fetch(req,server){
+        if(server.upgrade(req)){
+            return;
+        }
+        return new Response("Upgrade Failed")
+    },
+    websocket : {
+        message(ws,message){
+            async function main(){
+                const response = await client.user.create({
+                    data : {
+                        username : Math.random().toString(),
+                        password : Math.random().toString(),
+                    }
+                })
 
-const ws = new WebSocket("ws://localhost:8080");
-
-
-ws.on("error",(err : any) => {
-    console.error(err);
-    ws.close();
-})
-
-
-ws.on("open", async () => {
-    ws.send("The websocket connection is open")
-    ws.on("message",async (message : Buffer) => {
-        const data : Data = JSON.parse(message.toString())
-        await client.todo.update({
-            where : {
-                id: data.id,
-                userId : data.userId
-            },
-            data : {
-                isActive  : data.isActive
             }
-        })
-    })
+            main()
+            ws.send("Sending message")
+        }
+    }
 })
-
